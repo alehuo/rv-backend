@@ -1,12 +1,6 @@
 # rv-backend
 
-[![Build Status](https://travis-ci.org/ohtu2018-rv/rv-backend.svg?branch=develop)](https://travis-ci.org/ohtu2018-rv/rv-backend) [![codecov](https://codecov.io/gh/ohtu2018-rv/rv-backend/branch/develop/graph/badge.svg)](https://codecov.io/gh/ohtu2018-rv/rv-backend)
-
-RV backend
-
-[Staging](https://rv-backend-dev.herokuapp.com)
-
-[Production](https://rv-backend.herokuapp.com)
+New RV backend
 
 ## New updated starting instructions May 2019
 
@@ -14,22 +8,21 @@ These apply if you only want to run the backend without the frontend. To run it 
 
 ### On the first time
 
-- install node.js
-- install npm
-- install docker
-- add your user to the docker group
-- install docker-compose
-- install vs code
-- install plugins to vs code
-- clone backend from github
-- run npm install
-- run docker-compose up
-- run npm run db-migrate in the backend container
-- run npm run db-seed in the backend container
+- Install Node.js v20 and NPM
+    - Alternatively, if you nave Node Version Manager (NVM) installed, run `nvm install`
+- Install Docker
+- Install docker-compose
+- Install VSCode
+    - Optionally, install plugins to VSCode
+- Clone the backend from Github
+- Run `npm install`
+- Run `docker-compose up`
+- Run `npm run db:migrate` in the backend container
+- Run `npm run db:seed` in the backend container
 
 ### Testing the backend
 
-- run npm test
+- run `npm test`
 
 ## Old instructions below
 

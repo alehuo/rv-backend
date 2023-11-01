@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Deploy to staging
-if [ $TRAVIS_BRANCH = "develop" ] && [ $TRAVIS_PULL_REQUEST = "false" ]
+if [ "$TRAVIS_BRANCH" = "develop" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]
 then
     echo "Building Docker image..."
     docker build -t rv-backend .
     echo "Pushing image to Heroku..."
-    docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+    docker login --username=_ --password="$HEROKU_API_KEY" registry.heroku.com
     docker tag rv-backend registry.heroku.com/rv-backend-dev/web
     docker push registry.heroku.com/rv-backend-dev/web
     echo "Clearing and reseeding database..."
@@ -16,12 +16,12 @@ then
 fi
 
 # Deploy to production
-if [ $TRAVIS_BRANCH = "master" ] && [ $TRAVIS_PULL_REQUEST = "false" ]
+if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]
 then
     echo "Building Docker image..."
     docker build -t rv-backend .
     echo "Pushing image to Heroku..."
-    docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+    docker login --username=_ --password="$HEROKU_API_KEY" registry.heroku.com
     docker tag rv-backend registry.heroku.com/rv-backend/web
     docker push registry.heroku.com/rv-backend/web
 fi

@@ -1,0 +1,97 @@
+import chai from 'chai';
+const expect = chai.expect;
+import chaiHttp from 'chai-http';
+
+import { createApp } from '../../src/app';
+import knex from '../../src/db/knex';
+import * as jwt from '../../src/jwt/token';
+
+const server = createApp();
+chai.use(chaiHttp);
+
+const token = jwt.sign(
+    {
+        userId: 2
+    },
+    process.env.JWT_ADMIN_SECRET
+);
+
+describe('routes: admin history', () => {
+    beforeEach(async () => {
+        await knex.migrate.rollback();
+        await knex.migrate.latest();
+        await knex.seed.run();
+    });
+
+    afterEach(async () => {
+        await knex.migrate.rollback();
+    });
+
+    describe('global purchase history', () => {
+        describe('querying all purchases', () => {
+            it('should return a list of purchases', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/purchaseHistory')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(200);
+            });
+        });
+
+        describe('Querying a purchase by id', () => {
+            it('should return a purchase', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/purchaseHistory/1')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(200);
+            });
+
+            it('should fail with a nonexsisting id', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/purchaseHistory/999999')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(404);
+                expect(res.body.error_code).to.equal('not_found');
+            });
+        });
+    });
+
+    describe('global deposit history', () => {
+        describe('querying all events', () => {
+            it('should return list of deposits', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/depositHistory')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(200);
+            });
+        });
+
+        describe('querying deposit by id', () => {
+            it('should fail when using a nonexistent id', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/depositHistory/99999999')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(404);
+                expect(res.body.error_code).to.equal('not_found');
+            });
+
+            it('should return a deposit', async () => {
+                const res = await chai
+                    .request(server)
+                    .get('/api/v1/admin/depositHistory/1')
+                    .set('Authorization', 'Bearer ' + token);
+
+                expect(res.status).to.equal(200);
+            });
+        });
+    });
+});

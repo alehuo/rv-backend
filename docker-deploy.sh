@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tag as develop
-if [ $TRAVIS_BRANCH = "develop" ] && [ $TRAVIS_PULL_REQUEST = "false" ]
+if [ "$TRAVIS_BRANCH" = "develop" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]
 then
     echo "Building Docker image..."
     docker build . -t rv-backend
@@ -12,7 +12,7 @@ then
 fi
 
 # Tag as latest
-if [ $TRAVIS_BRANCH = "master" ] && [ $TRAVIS_PULL_REQUEST = "false" ]
+if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]
 then
     echo "Building Docker image..."
     docker build . -t rv-backend

@@ -1,0 +1,31 @@
+exports.up = async (knex: any) => {
+    if (!(await knex.schema.hasTable('PRODGROUP'))) {
+        await knex.schema.createTable('PRODGROUP', (table: any) => {
+            table.increments('pgrpid').primary().comment('Product group ID');
+            table.string('descr', 64).notNullable().comment('Product group description');
+        });
+    }
+
+    if (!(await knex.schema.hasTable('RVITEM'))) {
+        await knex.schema.createTable('RVITEM', (table: any) => {
+            table.increments('itemid').primary().comment('Item ID (unique)');
+            table
+                .integer('pgrpid')
+                .unsigned()
+                .notNullable()
+                .comment('Reference to product group of this item')
+                .references('pgrpid')
+                .inTable('PRODGROUP');
+            table.string('descr', 64).notNullable().comment('Textual product description (name)');
+            table.integer('weight').unsigned().notNullable().comment('Product weight');
+        });
+    }
+};
+
+exports.down = async (knex: any) => {
+    if (process.env.NODE_ENV !== 'production') {
+        await knex.schema.dropTableIfExists('RVITEM').dropTableIfExists('PRODGROUP');
+    } else {
+        throw new Error('dont drop stuff in production');
+    }
+};
